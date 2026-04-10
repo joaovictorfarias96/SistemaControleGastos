@@ -81,7 +81,7 @@ function App() {
   return (
     <div className="container">
       <header className="main-header">
-        <h1>Fluxo de Caixa Profissional 💰</h1>
+        <h1>Serviço de Fluxo Financeiro - SFF 💰</h1>
       </header>
 
       {/* SEÇÃO DE CADASTRO */}
