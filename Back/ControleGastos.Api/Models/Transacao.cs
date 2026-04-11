@@ -5,29 +5,16 @@ namespace ControleGastos.Api.Models;
 
 public class Transacao
 {
-	[Key]
-	public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; set; }
+    public string Descricao { get; set; } = string.Empty;
+    public decimal Valor { get; set; }
+    public string Tipo { get; set; } = string.Empty; // receita ou despesa
 
-	[Required]
-	[MaxLength(400)]
-	public string Descricao { get; set; } = string.Empty;
+    public Guid PessoaId { get; set; }
+    // Adicione esta linha:
+    public Pessoa? Pessoa { get; set; }
 
-	[Required]
-	[Range(0.01, double.MaxValue)] // Valor deve ser positivo
-	public decimal Valor { get; set; }
-
-	[Required]
-	public string Tipo { get; set; } // "despesa" ou "receita"
-
-	[Required]
-	public Guid CategoriaId { get; set; }
-
-	[ForeignKey("CategoriaId")]
-	public Categoria? Categoria { get; set; }
-
-	[Required]
-	public Guid PessoaId { get; set; }
-
-	[ForeignKey("PessoaId")]
-	public Pessoa? Pessoa { get; set; }
+    public Guid CategoriaId { get; set; }
+    // Adicione esta linha:
+    public Categoria? Categoria { get; set; }
 }

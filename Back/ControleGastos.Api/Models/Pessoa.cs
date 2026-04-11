@@ -5,16 +5,10 @@ namespace ControleGastos.Api.Models;
 
 public class Pessoa
 {
-    [Key]
-    public Guid Id { get; set; } = Guid.NewGuid();
-
-    [Required]
-    [MaxLength(200)]
+    public Guid Id { get; set; }
     public string Nome { get; set; } = string.Empty;
-
-    [Required]
     public int Idade { get; set; }
 
-    [JsonIgnore] // Adicione isso para resolver o loop infinito do JSON
-    public ICollection<Transacao>? Transacoes { get; set; }
+    // Adicione esta linha para o relacionamento:
+    public ICollection<Transacao> Transacoes { get; set; } = new List<Transacao>();
 }

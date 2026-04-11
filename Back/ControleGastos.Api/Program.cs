@@ -5,6 +5,8 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+
 // 1. Configura os Controladores e resolve o ciclo de JSON
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -37,6 +39,41 @@ builder.Services.AddCors(options => {
 });
 
 var app = builder.Build();
+
+// --- INÍCIO DO BLOCO DE AUTOMATIZAÇÃO (SEED) ---
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        var context = services.GetRequiredService<AppDbContext>();
+
+        // Se não houver nenhuma categoria no banco, ele cria as padrões
+        if (!context.Categorias.Any())
+        {
+            context.Categorias.AddRange(
+                new Categoria { Id = Guid.NewGuid(), Descricao = "Aluguel/Moradia", Finalidade = "despesa" },
+                new Categoria { Id = Guid.NewGuid(), Descricao = "Supermercado", Finalidade = "despesa" },
+                new Categoria { Id = Guid.NewGuid(), Descricao = "Salário", Finalidade = "receita" },
+                new Categoria { Id = Guid.NewGuid(), Descricao = "Lazer/Cinema", Finalidade = "ambas" },
+                new Categoria { Id = Guid.NewGuid(), Descricao = "Freelance", Finalidade = "receita" }
+            );
+            context.SaveChanges();
+        }
+    }
+    catch (Exception ex)
+    {
+        // Log de erro caso algo falhe na criação
+        Console.WriteLine($"Erro ao popular o banco: {ex.Message}");
+    }
+}
+// --- FIM DO BLOCO DE AUTOMATIZAÇÃO ---
+
+// Prossiga com o restante do Program.cs (app.UseSwagger, etc.)
+app.UseSwagger();
+app.UseSwaggerUI();
+// ...
+
 
 // 4. Pipeline de execução
 if (app.Environment.IsDevelopment())

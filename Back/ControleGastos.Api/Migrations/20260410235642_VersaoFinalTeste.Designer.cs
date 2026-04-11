@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ControleGastos.Api.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260410004012_InicializaçãoTotal")]
-    partial class InicializaçãoTotal
+    [Migration("20260410235642_VersaoFinalTeste")]
+    partial class VersaoFinalTeste
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -28,6 +28,7 @@ namespace ControleGastos.Api.Migrations
 
                     b.Property<string>("Descricao")
                         .IsRequired()
+                        .HasMaxLength(400)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Finalidade")

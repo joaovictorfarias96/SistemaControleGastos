@@ -1,12 +1,17 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace ControleGastos.Api.Models;
 
 public class Categoria
 {
+    [Key]
     public Guid Id { get; set; }
 
-    // O "= string.Empty" resolve esse erro do construtor
+    [Required]
+    [MaxLength(400)] // Requisito da especificação
     public string Descricao { get; set; } = string.Empty;
-    public string Finalidade { get; set; } = string.Empty;
+
+    [Required]
+    public string Finalidade { get; set; } = string.Empty; // despesa, receita ou ambas
 }

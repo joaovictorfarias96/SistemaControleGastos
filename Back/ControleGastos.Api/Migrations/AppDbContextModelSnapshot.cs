@@ -25,6 +25,7 @@ namespace ControleGastos.Api.Migrations
 
                     b.Property<string>("Descricao")
                         .IsRequired()
+                        .HasMaxLength(400)
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Finalidade")

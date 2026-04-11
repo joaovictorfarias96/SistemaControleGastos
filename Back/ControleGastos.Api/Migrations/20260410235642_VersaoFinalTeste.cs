@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ControleGastos.Api.Migrations
 {
     /// <inheritdoc />
-    public partial class InicializaçãoTotal : Migration
+    public partial class VersaoFinalTeste : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,7 +16,7 @@ namespace ControleGastos.Api.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "TEXT", nullable: false),
-                    Descricao = table.Column<string>(type: "TEXT", nullable: false),
+                    Descricao = table.Column<string>(type: "TEXT", maxLength: 400, nullable: false),
                     Finalidade = table.Column<string>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
@@ -45,8 +45,8 @@ namespace ControleGastos.Api.Migrations
                     Descricao = table.Column<string>(type: "TEXT", maxLength: 400, nullable: false),
                     Valor = table.Column<decimal>(type: "TEXT", nullable: false),
                     Tipo = table.Column<string>(type: "TEXT", nullable: false),
-                    CategoriaId = table.Column<Guid>(type: "TEXT", nullable: false),
-                    PessoaId = table.Column<Guid>(type: "TEXT", nullable: false)
+                    PessoaId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    CategoriaId = table.Column<Guid>(type: "TEXT", nullable: false)
                 },
                 constraints: table =>
                 {
