@@ -121,12 +121,12 @@ const App: React.FC = () => {
     return data.pessoas.filter(p => p.nome.toLowerCase().includes(buscaUsuario.toLowerCase()));
   }, [data.pessoas, buscaUsuario]);
 
-  if (loading) return <div className="loading-screen">FinanceFlow...</div>;
+  if (loading) return <div className="loading-screen">FinanceSystem...</div>;
 
   return (
     <div className="app-container">
       <header className="main-header">
-        <h1>Finance<span>Flow</span></h1>
+        <h1>Finance<span>System</span></h1>
         <nav className="nav-tabs">
           <button className={abaAtiva === 'painel' ? 'active' : ''} onClick={() => setAbaAtiva('painel')}>Lançamentos</button>
           <button className={abaAtiva === 'totais' ? 'active' : ''} onClick={() => setAbaAtiva('totais')}>Gestão e Usuários</button>
