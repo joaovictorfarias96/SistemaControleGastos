@@ -12,38 +12,26 @@ public class PessoaController : ControllerBase
     private readonly AppDbContext _context;
     public PessoaController(AppDbContext context) => _context = context;
 
+    // LISTAGEM
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Pessoa>>> GetPessoas()
         => await _context.Pessoas.ToListAsync();
 
+    // CRIAÇÃO
     [HttpPost]
     public async Task<ActionResult<Pessoa>> PostPessoa(Pessoa pessoa)
     {
         _context.Pessoas.Add(pessoa);
         await _context.SaveChangesAsync();
-        return Ok(pessoa);
-    } // Chave que faltava aqui
-
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeletePessoa(Guid id)
-    {
-        var pessoa = await _context.Pessoas.FindAsync(id);
-        if (pessoa == null) return NotFound();
-
-        _context.Pessoas.Remove(pessoa);
-        await _context.SaveChangesAsync();
-        return NoContent();
+        return CreatedAtAction(nameof(GetPessoas), new { id = pessoa.Id }, pessoa);
     }
 
+    // EDIÇÃO
     [HttpPut("{id}")]
     public async Task<IActionResult> PutPessoa(Guid id, Pessoa pessoa)
     {
-        if (id != pessoa.Id)
-        {
-            return BadRequest("O ID da URL não coincide com o ID do corpo.");
-        }
+        if (id != pessoa.Id) return BadRequest("IDs divergentes.");
 
-        // MARCA O OBJETO COMO MODIFICADO PARA O ENTITY FRAMEWORK
         _context.Entry(pessoa).State = EntityState.Modified;
 
         try
@@ -52,13 +40,27 @@ public class PessoaController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!PessoaExists(id)) return NotFound();
-            else throw;
+            if (!_context.Pessoas.Any(e => e.Id == id)) return NotFound();
+            throw;
         }
-
-        return NoContent(); // Retorno padrão para PUT de sucesso (204)
+        return NoContent();
     }
 
-    private bool PessoaExists(Guid id)
-        => _context.Pessoas.Any(e => e.Id == id);
+    // DELEÇÃO
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeletePessoa(Guid id)
+    {
+        var pessoa = await _context.Pessoas
+            .Include(p => p.Transacoes)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+        if (pessoa == null) return NotFound();
+
+        // Remove as transações associadas e a pessoa
+        _context.Transacoes.RemoveRange(pessoa.Transacoes);
+        _context.Pessoas.Remove(pessoa);
+
+        await _context.SaveChangesAsync();
+        return NoContent();
+    }
 }

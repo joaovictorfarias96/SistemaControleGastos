@@ -1,14 +1,19 @@
 using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization; // Adicione este using
 
 namespace ControleGastos.Api.Models;
 
 public class Pessoa
 {
-    public Guid Id { get; set; }
+    [Key]
+    public Guid Id { get; set; } = Guid.NewGuid(); // Identificador único automático
+
+    [Required]
+    [MaxLength(200)] // Requisito: texto com tamanho máximo de 200
     public string Nome { get; set; } = string.Empty;
+
+    [Required]
     public int Idade { get; set; }
 
-    // Adicione esta linha para o relacionamento:
-    public ICollection<Transacao> Transacoes { get; set; } = new List<Transacao>();
+    // Propriedade de navegação para as transações
+    public virtual ICollection<Transacao> Transacoes { get; set; } = new List<Transacao>();
 }
